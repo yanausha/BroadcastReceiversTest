@@ -6,12 +6,17 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.broadcastreceiverstest.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    private val localBroadcastManager by lazy {
+        LocalBroadcastManager.getInstance(this)
     }
 
     private val receiver = object : BroadcastReceiver() {
@@ -33,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.button.setOnClickListener {
             val intent = MyReceiver.newIntent(++count)
-            sendBroadcast(intent)
+            localBroadcastManager.sendBroadcast(intent)
         }
         val intentFilter = IntentFilter().apply {
             addAction(MyReceiver.ACTION_LOADED)
@@ -41,8 +46,11 @@ class MainActivity : AppCompatActivity() {
             addAction(Intent.ACTION_BATTERY_LOW)
             addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
         }
-        registerReceiver(receiver, intentFilter)
+        localBroadcastManager.registerReceiver(receiver, intentFilter)
+    }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        localBroadcastManager.unregisterReceiver(receiver)
     }
 }
