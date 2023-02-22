@@ -1,5 +1,7 @@
 package com.example.broadcastreceiverstest
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
@@ -8,13 +10,20 @@ import com.example.broadcastreceiverstest.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private var count = 0
-
-    private val receiver = MyReceiver()
-
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == MyReceiver.ACTION_LOADED) {
+                val percent = intent.getIntExtra(MyReceiver.EXTRA_PERCENT, 0)
+                binding.progressBar.progress = percent
+            }
+        }
+    }
+
+    private var count = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -12,7 +12,7 @@ class MyService : Service() {
             for (i in 1..10) {
                 Thread.sleep(1000)
                 Intent(MyReceiver.ACTION_LOADED).apply {
-                    putExtra(MyReceiver.EXTRA_PERCENT, i * 10.0)
+                    putExtra(MyReceiver.EXTRA_PERCENT, i * 10)
                     sendBroadcast(this)
                 }
             }
