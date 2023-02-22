@@ -3,14 +3,24 @@ package com.example.broadcastreceiverstest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 
 class MyReceiver: BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         when(intent?.action) {
+            ACTION_LOADED -> {
+                val percent = intent.getDoubleExtra(EXTRA_PERCENT, 0.00)
+                Log.d("MyReceiver", percent.toString())
+                Toast.makeText(
+                    context,
+                    "Loaded $percent",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
             ACTION_CLICKED -> {
-                val count = intent.getIntExtra(EXTRA_NAME, 0)
+                val count = intent.getIntExtra(EXTRA_COUNT, 0)
                 Toast.makeText(
                     context,
                     "Clicked $count",
@@ -38,10 +48,12 @@ class MyReceiver: BroadcastReceiver() {
     companion object {
 
         const val ACTION_CLICKED = "clicked"
-        private const val EXTRA_NAME = "myReceiver"
+        const val ACTION_LOADED = "loaded"
+        private const val EXTRA_COUNT = "count"
+        const val EXTRA_PERCENT = "percent"
 
         fun newIntent(count: Int): Intent {
-            return Intent(ACTION_CLICKED).putExtra(EXTRA_NAME, count)
+            return Intent(ACTION_CLICKED).putExtra(EXTRA_COUNT, count)
         }
     }
 }
