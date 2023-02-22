@@ -8,6 +8,8 @@ import com.example.broadcastreceiverstest.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private var count = 0
+
     private val receiver = MyReceiver()
 
     private val binding by lazy {
@@ -18,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.button.setOnClickListener {
-            val intent = Intent(MyReceiver.ACTION_CLICKED)
+            val intent = MyReceiver.newIntent(++count)
             sendBroadcast(intent)
         }
         val intentFilter = IntentFilter().apply {
